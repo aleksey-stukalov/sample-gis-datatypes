@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="com.company.cruisesample.web.route.RouteEdit"
+        datasource="routeDs"
+        messagesPack="com.company.cruisesample.web.route"
+        xmlns:chart="http://schemas.haulmont.com/charts/charts.xsd">
+    <dsContext>
+        <datasource id="routeDs"
+                    class="com.company.cruisesample.entity.Route"
+                    view="route-full-view">
+            <collectionDatasource id="portsDs"
+                                  property="ports"/>
+            <collectionDatasource id="waypointsDs"
+                                  property="waypoints"/>
+        </datasource>
+        <collectionDatasource id="optionsPortsDs"
+                              class="com.company.cruisesample.entity.Port">
+            <query>
+                <![CDATA[select e from cruisesample$Port e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="grid"
+            spacing="true">
+        <grid id="grid"
+              spacing="true"
+              width="100%">
+            <columns count="3"/>
+            <rows>
+                <row>
+                    <groupBox id="portsBox"
+                              caption="msg://com.company.cruisesample.entity/Route.ports"
+                              height="100%"
+                              rowspan="2">
+                        <table id="portsTable"
+                               height="100%"
+                               sortable="false"
+                               width="100%">
+                            <actions>
+                                <action id="add"/>
+                                <action id="remove"/>
+                            </actions>
+                            <columns>
+                                <column id="name"/>
+                            </columns>
+                            <rows datasource="portsDs"/>
+                            <buttonsPanel>
+                                <label align="MIDDLE_LEFT"
+                                       value="msg://Search"/>
+                                <lookupField id="lookupPortsField"
+                                             nullOptionVisible="false"
+                                             optionsDatasource="optionsPortsDs"/>
+                                <button action="portsTable.add"
+                                        icon="icons/plus-btn.png"
+                                        stylename="icon-only"/>
+                                <button action="portsTable.remove"
+                                        icon="icons/remove.png"
+                                        stylename="icon-only"/>
+                            </buttonsPanel>
+                        </table>
+                    </groupBox>
+                    <chart:mapViewer id="mapViewer"
+                                     colspan="2"
+                                     height="100%"
+                                     rowspan="2"
+                                     width="100%"/>
+                </row>
+                <row/>
+                <row>
+                    <groupBox caption="Routing"
+                              height="100%"
+                              spacing="true">
+                        <button id="buttonCalculateRoute"
+                                align="MIDDLE_CENTER"
+                                caption="Calculate Route"
+                                height="30%"
+                                invoke="onButtonCalculateRouteClick"/>
+                    </groupBox>
+                    <groupBox caption="Waypoints"
+                              colspan="2"
+                              height="100%"
+                              spacing="true">
+                        <table height="100%"
+                               sortable="false"
+                               width="100%">
+                            <columns>
+                                <column id="point"/>
+                                <column id="eta"/>
+                            </columns>
+                            <rows datasource="waypointsDs"/>
+                        </table>
+                    </groupBox>
+                </row>
+            </rows>
+        </grid>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

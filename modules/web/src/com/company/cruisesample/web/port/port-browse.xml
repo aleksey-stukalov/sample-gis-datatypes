@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="com.company.cruisesample.web.port.PortBrowse"
+        focusComponent="portsTable"
+        lookupComponent="portsTable"
+        messagesPack="com.company.cruisesample.web.port">
+    <dsContext>
+        <groupDatasource id="portsDs"
+                         class="com.company.cruisesample.entity.Port"
+                         view="_local">
+            <query>
+                <![CDATA[select e from cruisesample$Port e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="portsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="portsTable"
+                datasource="portsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="portsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="name"/>
+                <column id="location"/>
+            </columns>
+            <rows datasource="portsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="portsTable.create"/>
+                <button id="editBtn"
+                        action="portsTable.edit"/>
+                <button id="removeBtn"
+                        action="portsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

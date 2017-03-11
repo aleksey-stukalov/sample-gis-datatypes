@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<views xmlns="http://schemas.haulmont.com/cuba/view.xsd">
+    <view class="com.company.cruisesample.entity.Port"
+          extends="_local"
+          name="port-full-view">
+    </view>
+    <view class="com.company.cruisesample.entity.Route"
+          extends="_local"
+          name="route-full-view">
+        <property name="ports"
+                  view="_local"/>
+        <property name="waypoints"
+                  view="_local"/>
+    </view>
+</views>
