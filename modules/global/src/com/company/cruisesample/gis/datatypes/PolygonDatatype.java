@@ -62,20 +62,4 @@ public class PolygonDatatype implements Datatype<Polygon> {
     public Polygon parse(@Nullable String value, Locale locale) throws ParseException {
         return GeometryUtils.wktStringToPolygon(value);
     }
-
-    @Nullable
-    @Override
-    public Polygon read(ResultSet resultSet, int index) throws SQLException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void write(PreparedStatement statement, int index, @Nullable Object value) throws SQLException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public int getSqlType() {
-        return Types.OTHER;
-    }
 }

@@ -57,20 +57,4 @@ public class PointDatatype implements Datatype<Point> {
     public Point parse(@Nullable String value, Locale locale) throws ParseException {
         return parse(value);
     }
-
-    @Nullable
-    @Override
-    public Point read(ResultSet resultSet, int index) throws SQLException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void write(PreparedStatement statement, int index, @Nullable Object value) throws SQLException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public int getSqlType() {
-        return Types.OTHER;
-    }
 }

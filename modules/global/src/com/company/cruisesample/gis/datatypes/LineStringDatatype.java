@@ -61,19 +61,4 @@ public class LineStringDatatype implements Datatype<LineString> {
         return parse(value);
     }
 
-    @Nullable
-    @Override
-    public LineString read(ResultSet resultSet, int index) throws SQLException {
-        return null;
-    }
-
-    @Override
-    public void write(PreparedStatement statement, int index, @Nullable Object value) throws SQLException {
-
-    }
-
-    @Override
-    public int getSqlType() {
-        return Types.OTHER;
-    }
 }

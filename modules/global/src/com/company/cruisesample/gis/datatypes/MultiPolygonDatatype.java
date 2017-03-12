@@ -61,20 +61,4 @@ public class MultiPolygonDatatype implements Datatype<MultiPolygon> {
     public MultiPolygon parse(@Nullable String value, Locale locale) throws ParseException {
         return GeometryUtils.wktStringToMultiPolygon(value);
     }
-
-    @Nullable
-    @Override
-    public MultiPolygon read(ResultSet resultSet, int index) throws SQLException {
-        return null;
-    }
-
-    @Override
-    public void write(PreparedStatement statement, int index, @Nullable Object value) throws SQLException {
-
-    }
-
-    @Override
-    public int getSqlType() {
-        return Types.OTHER;
-    }
 }
