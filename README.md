@@ -1,6 +1,7 @@
 # sample-gis-datatypes
 
 The application extends standard CUBA datatypes with geo-specific types from the opensource [JTS Topology Suite](https://en.wikipedia.org/wiki/JTS_Topology_Suite):
+
 1. Point
 2. LineString
 3. Polygon
