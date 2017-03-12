@@ -35,7 +35,33 @@ The converters should also be registered in the [persistence.xml](https://github
 
 To apply the converters for a field it should be annotated 
 with the ```@Convert(converter = SomeConverter.class)``` annotation. 
-See the ```location``` field of the [```Port```](https://github.com/aleksey-stukalov/sample-gis-datatypes/blob/master/modules/global/src/com/company/cruisesample/entity/Port.java) entity in the sample project as an example.
+See the ```location``` field of the [```Port```](https://github.com/aleksey-stukalov/sample-gis-datatypes/blob/master/modules/global/src/com/company/cruisesample/entity/Port.java) 
+entity in the sample project as an example.
+
+```
+public class Port extends StandardEntity {
+    
+    ...
+    
+    @Convert(converter = CubaPointWKTConverter.class)
+    @MetaProperty(datatype = PointDatatype.NAME, mandatory = true)
+    @Column(name = "LOCATION", nullable = false)
+    protected Point location;
+    
+    ...
+    
+    public Point getLocation() {
+        return location;
+    }
+
+    public void setLocation(Point location) {
+        this.location = location;
+    }
+    
+    ...
+    
+}
+```
 
 ### Known Issues
 
