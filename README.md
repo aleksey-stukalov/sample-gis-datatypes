@@ -38,7 +38,7 @@ with the ```@Convert(converter = SomeConverter.class)``` annotation.
 See the ```location``` field of the [```Port```](https://github.com/aleksey-stukalov/sample-gis-datatypes/blob/master/modules/global/src/com/company/cruisesample/entity/Port.java) 
 entity in the sample project as an example.
 
-```
+```java
 public class Port extends StandardEntity {
     
     ...
