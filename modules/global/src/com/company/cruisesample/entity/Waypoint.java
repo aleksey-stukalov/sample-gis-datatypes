@@ -1,24 +1,21 @@
 package com.company.cruisesample.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+import com.company.cruisesample.gis.converters.CubaPointWKTConverter;
 import com.company.cruisesample.gis.datatypes.PointDatatype;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.vividsolutions.jts.geom.Point;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
 import com.haulmont.cuba.core.entity.StandardEntity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Table(name = "CRUISESAMPLE_WAYPOINT")
 @Entity(name = "cruisesample$Waypoint")
 public class Waypoint extends StandardEntity {
     private static final long serialVersionUID = 2740335642338212108L;
 
+    @Convert(converter = CubaPointWKTConverter.class)
     @MetaProperty(datatype = PointDatatype.NAME, mandatory = true)
     @Column(name = "POINT", nullable = false)
     protected Point point;

@@ -1,17 +1,10 @@
 package com.company.cruisesample.gis.utils;
 
-import com.google.common.collect.Sets;
 import com.vividsolutions.jts.geom.*;
 import com.vividsolutions.jts.geom.util.AffineTransformation;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
-
 import org.apache.commons.lang.StringUtils;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by aleksey on 10/03/2017.
