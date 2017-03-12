@@ -18,7 +18,7 @@ So, your application has all essential features to become a full-scale geographi
 
 Note: the application uses the [Charts and Maps](https://www.cuba-platform.com/add-ons) premium add-on and requires the commercial subscription.
 
-#### Adding a Custom Datatype
+### Adding a Custom Datatype
 
 General information on datatypes is available in the 
 [corresponding section](https://doc.cuba-platform.com/manual-latest/datatype.html) 
@@ -37,7 +37,7 @@ To apply the converters for a field it should be annotated
 with the ```@Convert(converter = SomeConverter.class)``` annotation. 
 See the ```location``` field of the [```Port```](https://github.com/aleksey-stukalov/sample-gis-datatypes/blob/master/modules/global/src/com/company/cruisesample/entity/Port.java) entity in the sample project as an example.
 
-#### Known Issues
+### Known Issues
 
 - Ports reordering in the route editor
 - Datatypes are not DB independent. 
