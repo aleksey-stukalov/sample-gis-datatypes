@@ -36,7 +36,7 @@ The converters should also be registered in the [persistence.xml](https://github
 To apply the converters for a field it should be annotated 
 with the ```@Convert(converter = SomeConverter.class)``` annotation. 
 See the ```location``` field of the [```Port```](https://github.com/aleksey-stukalov/sample-gis-datatypes/blob/master/modules/global/src/com/company/cruisesample/entity/Port.java) 
-entity in the sample project as an example.
+entity in the sample project as an example:
 
 ```java
 public class Port extends StandardEntity {
