@@ -9,8 +9,8 @@
         <datasource id="routeDs"
                     class="com.company.cruisesample.entity.Route"
                     view="route-full-view">
-            <collectionDatasource id="portsDs"
-                                  property="ports"/>
+            <collectionDatasource id="stopsDs"
+                                  property="stops"/>
             <collectionDatasource id="waypointsDs"
                                   property="waypoints"/>
         </datasource>
@@ -44,18 +44,15 @@
                                 <action id="remove"/>
                             </actions>
                             <columns>
-                                <column id="name"/>
+                                <column id="port"/>
                             </columns>
-                            <rows datasource="portsDs"/>
+                            <rows datasource="stopsDs"/>
                             <buttonsPanel>
                                 <label align="MIDDLE_LEFT"
                                        value="msg://Search"/>
                                 <lookupField id="lookupPortsField"
                                              nullOptionVisible="false"
                                              optionsDatasource="optionsPortsDs"/>
-                                <button action="portsTable.add"
-                                        icon="icons/plus-btn.png"
-                                        stylename="icon-only"/>
                                 <button action="portsTable.remove"
                                         icon="icons/remove.png"
                                         stylename="icon-only"/>

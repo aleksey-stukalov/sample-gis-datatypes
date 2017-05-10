@@ -1,6 +1,6 @@
 
 buildscript {
-    ext.cubaVersion = '6.4.2'
+    ext.cubaVersion = '6.5.0'
     repositories {
         maven {
             url 'https://repo.cuba-platform.com/content/groups/work'
@@ -20,9 +20,6 @@ buildscript {
     }
     dependencies {
         classpath "com.haulmont.gradle:cuba-plugin:$cubaVersion"
-
-        classpath "com.haulmont.cuba:cuba-global:$cubaVersion"
-        classpath "com.haulmont.charts:charts-global:$cubaVersion"
 
         
     }
@@ -52,6 +49,12 @@ cuba {
         vcs = 'Git'
     }
 }
+
+dependencies {
+    appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
+    appComponent("com.haulmont.charts:charts-global:$cubaVersion")
+}
+
 
 def hsql = 'org.hsqldb:hsqldb:2.2.9'
 

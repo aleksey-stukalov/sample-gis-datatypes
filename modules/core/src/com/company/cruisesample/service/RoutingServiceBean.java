@@ -1,6 +1,6 @@
 package com.company.cruisesample.service;
 
-import com.company.cruisesample.entity.Port;
+import com.company.cruisesample.entity.Stop;
 import com.company.cruisesample.entity.Waypoint;
 import com.haulmont.cuba.core.global.Metadata;
 import org.apache.commons.lang.time.DateUtils;
@@ -18,11 +18,11 @@ public class RoutingServiceBean implements RoutingService {
     protected Metadata metadata;
 
     @Override
-    public List<Waypoint> calculateRoute(List<Port> ports) {
+    public List<Waypoint> calculateRoute(List<Stop> stops) {
         List<Waypoint> result = new ArrayList<>();
-        for (Port p : ports) {
+        for (Stop s : stops) {
             Waypoint wp = metadata.create(Waypoint.class);
-            wp.setPoint(p.getLocation());
+            wp.setPoint(s.getPort().getLocation());
             if (result.size() == 0)
                 wp.setEta(new Date());
             else {

@@ -2,6 +2,7 @@ package com.company.cruisesample.web.route;
 
 import com.company.cruisesample.entity.Port;
 import com.company.cruisesample.entity.Route;
+import com.company.cruisesample.entity.Stop;
 import com.company.cruisesample.entity.Waypoint;
 import com.company.cruisesample.gis.utils.MapViewUtils;
 import com.company.cruisesample.service.RoutingService;
@@ -9,6 +10,7 @@ import com.haulmont.charts.gui.components.map.MapViewer;
 import com.haulmont.charts.gui.map.model.GeoPoint;
 import com.haulmont.charts.gui.map.model.Marker;
 import com.haulmont.charts.gui.map.model.Polyline;
+import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.LookupField;
 import com.haulmont.cuba.gui.components.actions.RemoveAction;
@@ -21,11 +23,12 @@ import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class RouteEdit extends AbstractEditor<Route> {
 
     @Inject
-    private CollectionDatasource<Port, UUID> portsDs;
+    private CollectionDatasource<Stop, UUID> stopsDs;
 
     @Inject
     private MapViewer mapViewer;
@@ -49,6 +52,9 @@ public class RouteEdit extends AbstractEditor<Route> {
 
     private Polyline routePolyline;
 
+    @Inject
+    private Metadata metadata;
+
     @Override
     public void ready() {
         super.ready();
@@ -57,21 +63,32 @@ public class RouteEdit extends AbstractEditor<Route> {
         synchronizePortsOnMap();
         paintRoute();
 
-        portsDs.addCollectionChangeListener(e -> {
+        stopsDs.addCollectionChangeListener(e -> {
             synchronizePortsOnMap();
             clearWaypoints();
             paintRoute();
         });
 
         mapViewer.setMinZoom(2);
-        if (portsDs.getItems().size() == 0) {
+        if (stopsDs.getItems().size() == 0) {
             mapViewer.setZoom(2);
             mapViewer.setCenter(mapViewer.createGeoPoint(0, 0));
         }
 
         optionsPortsDs.addItemChangeListener(e -> {
             if (e.getItem() != null) {
-                portsDs.addItem(e.getItem());
+                Stop s = metadata.create(Stop.class);
+
+                //unsafe! only for showcase purpose
+                if (stopsDs.getItems().size() == 0)
+                    s.setOrder(0);
+                else {
+                    Integer maxOrder = stopsDs.getItems().stream().map(Stop::getOrder).max(Integer::compareTo).get();
+                    s.setOrder(maxOrder + 1);
+                }
+
+                s.setPort(e.getItem());
+                stopsDs.addItem(s);
                 lookupPortsField.setValue(null);
             }
         });
@@ -80,14 +97,17 @@ public class RouteEdit extends AbstractEditor<Route> {
 
     @Override
     protected boolean preCommit() {
-        String name = getItem().getPorts().stream().map(Port::getName).reduce((s1, s2) -> s1 + " → " + s2).get();
+        String name = getItem().getStops().stream()
+                .map(Stop::getPort)
+                .map(Port::getName)
+                .reduce((s1, s2) -> s1 + " → " + s2).get();
         getItem().setName(name);
         return super.preCommit();
     }
 
     public void onButtonCalculateRouteClick() {
         clearWaypoints();
-        List<Waypoint> waypoints = routingService.calculateRoute(new ArrayList<>(portsDs.getItems()));
+        List<Waypoint> waypoints = routingService.calculateRoute(new ArrayList<>(stopsDs.getItems()));
         waypoints.forEach(wp -> {
             wp.setRoute(getItem());
             waypointsDs.addItem(wp);
@@ -127,7 +147,8 @@ public class RouteEdit extends AbstractEditor<Route> {
     }
 
     protected void synchronizePortsOnMap() {
-        portsDs.getItems().forEach(port -> {
+        List<Port> ports = stopsDs.getItems().stream().map(Stop::getPort).collect(Collectors.toList());
+        ports.forEach(port -> {
                     Marker m = (Marker) portMarkerMap.get(port);
                     if (m == null) {
                         m = MapViewUtils.addMarker(mapViewer, port.getName(), port.getLocation(), false);
@@ -139,7 +160,7 @@ public class RouteEdit extends AbstractEditor<Route> {
 
         mapViewer.getMarkers().forEach(marker -> {
             Port p = (Port) portMarkerMap.getKey(marker);
-            if (!portsDs.getItems().contains(p)) {
+            if (!ports.contains(p)) {
                 mapViewer.removeMarker(marker);
                 portMarkerMap.remove(p);
                 optionsPortsDs.includeItem(p);
@@ -150,22 +171,24 @@ public class RouteEdit extends AbstractEditor<Route> {
     }
 
     protected void autoscaleMap() {
-        if (portsDs.getItems().size() == 0)
+        List<Port> ports = stopsDs.getItems().stream().map(Stop::getPort).collect(Collectors.toList());
+
+        if (ports.size() == 0)
             return;
 
-        double minLon = portsDs.getItems().stream().map(port -> port.getLocation().getX())
+        double minLon = ports.stream().map(port -> port.getLocation().getX())
                 .min(Double::compare)
                 .get();
 
-        double maxLon = portsDs.getItems().stream().map(port -> port.getLocation().getX())
+        double maxLon = ports.stream().map(port -> port.getLocation().getX())
                 .max(Double::compare)
                 .get();
 
-        double minLat = portsDs.getItems().stream().map(port -> port.getLocation().getY())
+        double minLat = ports.stream().map(port -> port.getLocation().getY())
                 .min(Double::compare)
                 .get();
 
-        double maxLat = portsDs.getItems().stream().map(port -> port.getLocation().getY())
+        double maxLat = ports.stream().map(port -> port.getLocation().getY())
                 .max(Double::compare)
                 .get();
 

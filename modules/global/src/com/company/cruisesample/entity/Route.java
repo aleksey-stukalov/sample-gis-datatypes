@@ -24,17 +24,27 @@ public class Route extends StandardEntity {
     @Column(name = "NAME", nullable = false)
     protected String name;
 
-    @JoinTable(name = "CRUISESAMPLE_ROUTE_PORT_LINK",
+    @OrderBy("order")
+    @JoinTable(name = "CRUISESAMPLE_ROUTE_STOP_LINK",
         joinColumns = @JoinColumn(name = "ROUTE_ID"),
-        inverseJoinColumns = @JoinColumn(name = "PORT_ID"))
+        inverseJoinColumns = @JoinColumn(name = "STOP_ID"))
     @ManyToMany
-    protected List<Port> ports;
+    protected List<Stop> stops;
 
     @OrderBy("eta")
     @Composition
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "route")
     protected List<Waypoint> waypoints;
+
+    public void setStops(List<Stop> stops) {
+        this.stops = stops;
+    }
+
+    public List<Stop> getStops() {
+        return stops;
+    }
+
 
     public List<Waypoint> getWaypoints() {
         return waypoints;
@@ -44,14 +54,6 @@ public class Route extends StandardEntity {
         this.waypoints = waypoints;
     }
 
-
-    public List<Port> getPorts() {
-        return ports;
-    }
-
-    public void setPorts(List<Port> ports) {
-        this.ports = ports;
-    }
 
 
 

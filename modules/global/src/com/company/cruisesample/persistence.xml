@@ -10,5 +10,6 @@
         <class>com.company.cruisesample.entity.Port</class>
         <class>com.company.cruisesample.entity.Route</class>
         <class>com.company.cruisesample.entity.Waypoint</class>
+        <class>com.company.cruisesample.entity.Stop</class>
     </persistence-unit>
 </persistence>
