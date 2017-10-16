@@ -65,6 +65,5 @@ public class Port extends StandardEntity {
 
 ### Known Issues
 
-- Ports reordering in the route editor
 - Datatypes are not DB independent. 
 To switch to another DB change the ```sqlType``` attribute to match you DBMS in the [metadata.xml](https://github.com/aleksey-stukalov/sample-gis-datatypes/blob/master/modules/global/src/com/company/cruisesample/metadata.xml) file
