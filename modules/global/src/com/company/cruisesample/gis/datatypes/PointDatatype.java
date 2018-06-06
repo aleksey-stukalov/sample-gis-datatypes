@@ -6,10 +6,6 @@ import com.vividsolutions.jts.geom.Point;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
 import java.text.ParseException;
 import java.util.Locale;
 
@@ -31,13 +27,13 @@ public class PointDatatype implements Datatype<Point> {
 
     @Override
     public Class getJavaClass() {
-        return Point.class;
+        return com.vividsolutions.jts.geom.Point.class;
     }
 
     @Nonnull
     @Override
     public String format(@Nullable Object value) {
-        return value == null ? "" : ((Point)value).toText();
+        return value == null ? "" : ((com.vividsolutions.jts.geom.Point)value).toText();
     }
 
     @Nonnull
@@ -48,13 +44,13 @@ public class PointDatatype implements Datatype<Point> {
 
     @Nullable
     @Override
-    public Point parse(@Nullable String value) throws ParseException {
+    public com.vividsolutions.jts.geom.Point parse(@Nullable String value) throws ParseException {
         return GeometryUtils.wktStringToPoint(value);
     }
 
     @Nullable
     @Override
-    public Point parse(@Nullable String value, Locale locale) throws ParseException {
+    public com.vividsolutions.jts.geom.Point parse(@Nullable String value, Locale locale) throws ParseException {
         return parse(value);
     }
 }

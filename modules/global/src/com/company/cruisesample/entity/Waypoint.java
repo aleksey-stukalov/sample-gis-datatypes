@@ -5,7 +5,7 @@ import javax.persistence.*;
 import com.company.cruisesample.gis.converters.CubaPointWKTConverter;
 import com.company.cruisesample.gis.datatypes.PointDatatype;
 import com.haulmont.chile.core.annotations.MetaProperty;
-import com.vividsolutions.jts.geom.Point;
+
 import java.util.Date;
 
 import com.haulmont.cuba.core.entity.StandardEntity;
@@ -18,7 +18,7 @@ public class Waypoint extends StandardEntity {
     @Convert(converter = CubaPointWKTConverter.class)
     @MetaProperty(datatype = PointDatatype.NAME, mandatory = true)
     @Column(name = "POINT", nullable = false)
-    protected Point point;
+    protected com.vividsolutions.jts.geom.Point point;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "ETA")
@@ -37,11 +37,11 @@ public class Waypoint extends StandardEntity {
     }
 
 
-    public void setPoint(Point point) {
+    public void setPoint(com.vividsolutions.jts.geom.Point point) {
         this.point = point;
     }
 
-    public Point getPoint() {
+    public com.vividsolutions.jts.geom.Point getPoint() {
         return point;
     }
 

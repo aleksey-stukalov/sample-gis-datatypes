@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <metadata xmlns="http://schemas.haulmont.com/cuba/metadata.xsd">
-
     <datatypes>
-        <datatype class="com.company.cruisesample.gis.datatypes.PolygonDatatype"
+        <datatype id="polygon"
+                  class="com.company.cruisesample.gis.datatypes.PolygonDatatype"
                   javaType="com.vividsolutions.jts.geom.Polygon"
-                  sqlType="LONGVARCHAR"
-        />
-        <datatype class="com.company.cruisesample.gis.datatypes.MultiPolygonDatatype"
+                  sqlType="LONGVARCHAR"/>
+        <datatype id="multipolygon"
+                  class="com.company.cruisesample.gis.datatypes.MultiPolygonDatatype"
                   javaType="com.vividsolutions.jts.geom.MultiPolygon"
-                  sqlType="LONGVARCHAR"
-        />
-        <datatype class="com.company.cruisesample.gis.datatypes.LineStringDatatype"
+                  sqlType="LONGVARCHAR"/>
+        <datatype id="linestring"
+                  class="com.company.cruisesample.gis.datatypes.LineStringDatatype"
                   javaType="com.vividsolutions.jts.geom.LineString"
-                  sqlType="LONGVARCHAR"
-        />
-        <datatype class="com.company.cruisesample.gis.datatypes.PointDatatype"
+                  sqlType="LONGVARCHAR"/>
+        <datatype id="point"
+                  class="com.company.cruisesample.gis.datatypes.PointDatatype"
                   javaType="com.vividsolutions.jts.geom.Point"
-                  sqlType="LONGVARCHAR"
-        />
+                  sqlType="LONGVARCHAR"/>
     </datatypes>
-
-    <metadata-model root-package="com.company.cruisesample" namespace="cruisesample"/>
-
+    <metadata-model namespace="cruisesample"
+                    root-package="com.company.cruisesample"/>
 </metadata>

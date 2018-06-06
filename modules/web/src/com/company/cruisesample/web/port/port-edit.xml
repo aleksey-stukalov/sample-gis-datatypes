@@ -4,8 +4,8 @@
         class="com.company.cruisesample.web.port.PortEdit"
         datasource="portDs"
         focusComponent="fieldGroup"
-        messagesPack="com.company.cruisesample.web.port"
-        xmlns:chart="http://schemas.haulmont.com/charts/charts.xsd">
+        messagesPack="com.company.cruisesample.web.port">
+        <!--xmlns:chart="http://schemas.haulmont.com/charts/charts.xsd">-->
     <dsContext>
         <datasource id="portDs"
                     class="com.company.cruisesample.entity.Port"
@@ -18,12 +18,13 @@
         <fieldGroup id="fieldGroup"
                     datasource="portDs">
             <column width="250px">
-                <field id="name"/>
+                <field property="name"/>
+                <field property="location"/>
             </column>
         </fieldGroup>
-        <chart:mapViewer id="mapViewer"
-                         height="300px"
-                         width="300px"/>
+        <!--<chart:mapViewer id="mapViewer"-->
+                         <!--height="300px"-->
+                         <!--width="300px"/>-->
         <frame id="windowActions"
                screen="editWindowActions"/>
     </layout>

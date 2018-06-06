@@ -1,0 +1,8 @@
+<components xmlns="http://schemas.haulmont.com/cuba/components.xsd">
+    <component>
+        <name>GisPointEditor</name>
+        <class>com.company.cruisesample.web.components.WebGisPointEditor</class>
+        <!--<tag>gis-point-editor</tag>-->
+        <!--<componentLoader></componentLoader>-->
+    </component>
+</components>

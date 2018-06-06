@@ -1,5 +1,6 @@
-package com.company.cruisesample.gis.utils;
+package com.company.cruisesample.web.components;
 
+import com.company.cruisesample.gis.utils.GeometryUtils;
 import com.haulmont.charts.gui.components.map.MapViewer;
 import com.haulmont.charts.gui.map.model.GeoPoint;
 import com.haulmont.charts.gui.map.model.Marker;

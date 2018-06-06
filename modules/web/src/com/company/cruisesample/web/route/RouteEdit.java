@@ -4,8 +4,8 @@ import com.company.cruisesample.entity.Port;
 import com.company.cruisesample.entity.Route;
 import com.company.cruisesample.entity.Stop;
 import com.company.cruisesample.entity.Waypoint;
-import com.company.cruisesample.gis.utils.MapViewUtils;
 import com.company.cruisesample.service.RoutingService;
+import com.company.cruisesample.web.components.MapViewUtils;
 import com.haulmont.charts.gui.components.map.MapViewer;
 import com.haulmont.charts.gui.map.model.GeoPoint;
 import com.haulmont.charts.gui.map.model.Marker;
@@ -15,12 +15,13 @@ import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.LookupField;
 import com.haulmont.cuba.gui.components.actions.RemoveAction;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
-import org.apache.commons.collections.BidiMap;
-import org.apache.commons.collections.bidimap.DualHashBidiMap;
+import org.apache.commons.collections4.BidiMap;
+import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -176,21 +177,21 @@ public class RouteEdit extends AbstractEditor<Route> {
         if (ports.size() == 0)
             return;
 
-        double minLon = ports.stream().map(port -> port.getLocation().getX())
-                .min(Double::compare)
-                .get();
+        double minLon = ports.stream()
+                .min(Comparator.comparing(port -> port.getLocation().getX()))
+                .get().getLocation().getX();
 
-        double maxLon = ports.stream().map(port -> port.getLocation().getX())
-                .max(Double::compare)
-                .get();
+        double maxLon = ports.stream()
+                .max(Comparator.comparing(port -> port.getLocation().getX()))
+                .get().getLocation().getX();
 
-        double minLat = ports.stream().map(port -> port.getLocation().getY())
-                .min(Double::compare)
-                .get();
+        double minLat = ports.stream()
+                .min(Comparator.comparing(port -> port.getLocation().getY()))
+                .get().getLocation().getY();
 
-        double maxLat = ports.stream().map(port -> port.getLocation().getY())
-                .max(Double::compare)
-                .get();
+        double maxLat = ports.stream()
+                .max(Comparator.comparing(port -> port.getLocation().getY()))
+                .get().getLocation().getY();
 
         mapViewer.fitToBounds(mapViewer.createGeoPoint(maxLat, maxLon),
                 mapViewer.createGeoPoint(minLat, minLon));
