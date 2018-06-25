@@ -16,7 +16,7 @@ So, your application has all essential features to become a full-scale geographi
 
 ![screenshot](https://github.com/aleksey-stukalov/sample-gis-datatypes/blob/master/screenshots/sample-gis-screenshot.png)
 
-Note: the application uses the [Charts and Maps](https://www.cuba-platform.com/add-ons) premium add-on and requires the commercial subscription.
+Note: the application uses the [Charts and Maps](https://www.cuba-platform.com/add-ons) premium add-on and requires the commercial subscription or you can easily get [trial](https://www.cuba-platform.com/store#/store/) to run this application on your local environment.
 
 ### Adding a Custom Datatype
 
