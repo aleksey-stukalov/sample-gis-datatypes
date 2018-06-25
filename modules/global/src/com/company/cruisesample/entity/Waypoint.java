@@ -1,24 +1,23 @@
 package com.company.cruisesample.entity;
 
-import javax.persistence.*;
-
-import com.company.cruisesample.gis.converters.CubaPointWKTConverter;
+import com.company.cruisesample.gis.converters.postgis.CubaPointPostgisConverter;
 import com.company.cruisesample.gis.datatypes.PointDatatype;
 import com.haulmont.chile.core.annotations.MetaProperty;
-
-import java.util.Date;
-
 import com.haulmont.cuba.core.entity.StandardEntity;
+
+import javax.persistence.*;
+import java.util.Date;
+import com.vividsolutions.jts.geom.Point;
 
 @Table(name = "CRUISESAMPLE_WAYPOINT")
 @Entity(name = "cruisesample$Waypoint")
 public class Waypoint extends StandardEntity {
     private static final long serialVersionUID = 2740335642338212108L;
 
-    @Convert(converter = CubaPointWKTConverter.class)
+    @Convert(converter = CubaPointPostgisConverter.class)
     @MetaProperty(datatype = PointDatatype.NAME, mandatory = true)
-    @Column(name = "POINT", nullable = false)
-    protected com.vividsolutions.jts.geom.Point point;
+    @Column(name = "POINT", nullable = false, columnDefinition = "geometry not null")
+    protected Point point;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "ETA")
@@ -28,6 +27,15 @@ public class Waypoint extends StandardEntity {
     @JoinColumn(name = "ROUTE_ID")
     protected Route route;
 
+    public Point getPoint() {
+        return point;
+    }
+
+    public void setPoint(Point point) {
+        this.point = point;
+    }
+
+
     public void setRoute(Route route) {
         this.route = route;
     }
@@ -36,14 +44,6 @@ public class Waypoint extends StandardEntity {
         return route;
     }
 
-
-    public void setPoint(com.vividsolutions.jts.geom.Point point) {
-        this.point = point;
-    }
-
-    public com.vividsolutions.jts.geom.Point getPoint() {
-        return point;
-    }
 
     public void setEta(Date eta) {
         this.eta = eta;

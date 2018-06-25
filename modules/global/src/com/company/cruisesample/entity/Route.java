@@ -2,14 +2,6 @@ package com.company.cruisesample.entity;
 
 import javax.persistence.*;
 
-import com.company.cruisesample.gis.converters.CubaLineStringWKTConverter;
-import com.company.cruisesample.gis.datatypes.LineStringDatatype;
-import com.haulmont.chile.core.annotations.MetaProperty;
-import com.vividsolutions.jts.geom.LineString;
-
-import java.util.Optional;
-import java.util.Set;
-
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;

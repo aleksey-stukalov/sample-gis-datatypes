@@ -1,4 +1,4 @@
-package com.company.cruisesample.gis.converters;
+package com.company.cruisesample.gis.converters.wkt;
 
 import com.company.cruisesample.gis.utils.GeometryUtils;
 import com.vividsolutions.jts.geom.MultiPolygon;
@@ -9,7 +9,7 @@ import javax.persistence.Converter;
 /**
  * Created by aleksey on 10/03/2017.
  */
-@Converter(autoApply = true)
+@Converter
 public class CubaMultiPolygonWKTConverter implements AttributeConverter<MultiPolygon, String> {
 
     @Override

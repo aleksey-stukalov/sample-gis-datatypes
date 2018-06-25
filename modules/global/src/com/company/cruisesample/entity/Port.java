@@ -1,6 +1,6 @@
 package com.company.cruisesample.entity;
 
-import com.company.cruisesample.gis.converters.CubaPointWKTConverter;
+import com.company.cruisesample.gis.converters.postgis.CubaPointPostgisConverter;
 import com.company.cruisesample.gis.datatypes.PointDatatype;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import com.vividsolutions.jts.geom.Point;
 
 @NamePattern("%s|name")
 @Table(name = "CRUISESAMPLE_PORT")
@@ -20,18 +21,19 @@ public class Port extends StandardEntity {
     @Column(name = "NAME", nullable = false)
     protected String name;
     
-    @Convert(converter = CubaPointWKTConverter.class)
+    @Convert(converter = CubaPointPostgisConverter.class)
     @MetaProperty(datatype = PointDatatype.NAME, mandatory = true)
-    @Column(name = "LOCATION", nullable = false)
-    protected com.vividsolutions.jts.geom.Point location;
+    @Column(name = "LOCATION", nullable = false, columnDefinition = "geometry not null")
+    protected Point location;
 
-    public com.vividsolutions.jts.geom.Point getLocation() {
+    public Point getLocation() {
         return location;
     }
 
-    public void setLocation(com.vividsolutions.jts.geom.Point location) {
+    public void setLocation(Point location) {
         this.location = location;
     }
+
 
     public void setName(String name) {
         this.name = name;

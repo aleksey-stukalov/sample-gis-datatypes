@@ -19,7 +19,7 @@ import java.util.Locale;
  * Created by aleksey on 10/03/2017.
  */
 public class MultiPolygonDatatype implements Datatype<MultiPolygon> {
-    public final static String NAME = "multipolygon";
+    public final static String NAME = "GEOMULTIPOLYGON";
 
     public MultiPolygonDatatype(Element element) {
     }

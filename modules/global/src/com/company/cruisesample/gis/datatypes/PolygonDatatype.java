@@ -16,7 +16,7 @@ import java.util.Locale;
 
 public class PolygonDatatype implements Datatype<Polygon> {
 
-    public final static String NAME = "polygon";
+    public final static String NAME = "GEOPOLYGON";
 
     public PolygonDatatype(Element element) {
     }

@@ -3,10 +3,14 @@
              version="2.0">
     <persistence-unit name="cruise-sample"
                       transaction-type="RESOURCE_LOCAL">
-        <class>com.company.cruisesample.gis.converters.CubaPointWKTConverter</class>
-        <class>com.company.cruisesample.gis.converters.CubaLineStringWKTConverter</class>
-        <class>com.company.cruisesample.gis.converters.CubaMultiPolygonWKTConverter</class>
-        <class>com.company.cruisesample.gis.converters.CubaPolygonWKTConverter</class>
+        <class>com.company.cruisesample.gis.converters.wkt.CubaPointWKTConverter</class>
+        <class>com.company.cruisesample.gis.converters.wkt.CubaLineStringWKTConverter</class>
+        <class>com.company.cruisesample.gis.converters.wkt.CubaMultiPolygonWKTConverter</class>
+        <class>com.company.cruisesample.gis.converters.wkt.CubaPolygonWKTConverter</class>
+        <class>com.company.cruisesample.gis.converters.postgis.CubaPointPostgisConverter</class>
+        <class>com.company.cruisesample.gis.converters.postgis.CubaLineStringPostgisConverter</class>
+        <class>com.company.cruisesample.gis.converters.postgis.CubaMultiPolygonPostgisConverter</class>
+        <class>com.company.cruisesample.gis.converters.postgis.CubaPolygonPostgisConverter</class>
         <class>com.company.cruisesample.entity.Port</class>
         <class>com.company.cruisesample.entity.Route</class>
         <class>com.company.cruisesample.entity.Waypoint</class>

@@ -58,13 +58,13 @@ public class WebGisPointEditor extends WebGoogleMapViewer implements GisPointEdi
     public WebGisPointEditor() {
         //adding listeners for input
         addMapClickListener(e -> {
-            if (editable) {
+            if (isEditable()) {
                 setPoint(MapViewUtils.geoPoint2Point(e.getPosition()));
             }
         });
 
         addMarkerDragListener(e -> {
-            if (editable) {
+            if (isEditable()) {
                 setPoint(MapViewUtils.geoPoint2Point(e.getMarker().getPosition()));
             }
         });
@@ -77,6 +77,7 @@ public class WebGisPointEditor extends WebGoogleMapViewer implements GisPointEdi
         if ((datasource == null && property != null) || (datasource != null && property == null))
             throw new IllegalArgumentException("Datasource and property should be either null or not null at the same time");
 
+        //skip method if there is no difference between old and new values
         if (datasource == this.datasource && ((metaPropertyPath != null && metaPropertyPath.toString().equals(property)) ||
                 (metaPropertyPath == null && property == null)))
             return;

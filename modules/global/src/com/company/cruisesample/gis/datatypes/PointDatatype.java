@@ -14,7 +14,7 @@ import java.util.Locale;
  */
 public class PointDatatype implements Datatype<Point> {
 
-    public final static String NAME = "point";
+    public final static String NAME = "GEOPOINT";
 
 
     public PointDatatype() {

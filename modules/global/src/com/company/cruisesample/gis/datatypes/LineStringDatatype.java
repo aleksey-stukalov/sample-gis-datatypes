@@ -18,7 +18,7 @@ import java.util.Locale;
  */
 public class LineStringDatatype implements Datatype<LineString> {
 
-    public final static String NAME = "linestring";
+    public final static String NAME = "GEOLINESTRING";
 
     public LineStringDatatype(Element element) {
     }
