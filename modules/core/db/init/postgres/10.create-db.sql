@@ -44,9 +44,9 @@ create table CRUISESAMPLE_WAYPOINT (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
+    POINT geometry not null,
     ETA timestamp,
     ROUTE_ID uuid,
-    POINT geometry not null,
     --
     primary key (ID)
 )^

@@ -16,8 +16,6 @@ So, your application has all essential features to become a full-scale geographi
 
 ![screenshot](https://github.com/aleksey-stukalov/sample-gis-datatypes/blob/master/screenshots/sample-gis-screenshot.png)
 
-Note: the application uses the [Charts and Maps](https://www.cuba-platform.com/add-ons) premium add-on and requires the commercial subscription or you can easily get [trial](https://www.cuba-platform.com/store#/store/) to run this application on your local environment.
-
 ### Adding a Custom Datatype
 
 General information on datatypes is available in the 
@@ -63,7 +61,14 @@ public class Port extends StandardEntity {
 }
 ```
 
-### Known Issues
+### DBMS support
 
 - Datatypes are not DB independent. 
-To switch to another DB change the ```sqlType``` attribute to match you DBMS in the [metadata.xml](https://github.com/aleksey-stukalov/sample-gis-datatypes/blob/master/modules/global/src/com/company/cruisesample/metadata.xml) file
+To specify SQL type which should be used with another DBMS - add additional `@Ddl` annotations to the data type definitions in the `com.company.cruisesample.gis.datatypes` package:
+```java
+@Ddl(dbms = "postgres", value = "geometry")
+@Ddl(dbms = "mydbms", value = "dbms-specific SQL type")
+public class PointDatatype implements Datatype<Point> {
+...
+}
+```

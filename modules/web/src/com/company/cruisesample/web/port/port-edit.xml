@@ -17,7 +17,7 @@
             spacing="true">
         <fieldGroup id="fieldGroup"
                     datasource="portDs">
-            <column width="250px">
+            <column width="350px">
                 <field property="name"/>
                 <field property="location"/>
             </column>

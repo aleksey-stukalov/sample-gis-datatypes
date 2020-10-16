@@ -1,6 +1,7 @@
 package com.company.cruisesample.gis.datatypes;
 
 import com.company.cruisesample.gis.utils.GeometryUtils;
+import com.haulmont.chile.core.annotations.Ddl;
 import com.haulmont.chile.core.datatypes.Datatype;
 import com.vividsolutions.jts.geom.Polygon;
 import org.dom4j.Element;
@@ -13,7 +14,7 @@ import java.util.Locale;
 /**
  * Created by aleksey on 10/03/2017.
  */
-
+@Ddl(dbms = "postgres", value = "geometry")
 public class PolygonDatatype implements Datatype<Polygon> {
 
     public final static String NAME = "GEOPOLYGON";

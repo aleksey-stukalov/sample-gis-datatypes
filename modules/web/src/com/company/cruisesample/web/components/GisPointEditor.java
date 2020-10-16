@@ -7,7 +7,7 @@ import com.vividsolutions.jts.geom.Point;
 /**
  * Created by Aleksey Stukalov on 05/06/2018.
  */
-public interface GisPointEditor extends Field, MapViewer {
+public interface GisPointEditor extends Field<Point>, MapViewer {
     String NAME = "GisPointEditor";
 
     Point getPoint();

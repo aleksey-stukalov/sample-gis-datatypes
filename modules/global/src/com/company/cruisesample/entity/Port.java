@@ -23,7 +23,7 @@ public class Port extends StandardEntity {
     
     @Convert(converter = CubaPointPostgisConverter.class)
     @MetaProperty(datatype = PointDatatype.NAME, mandatory = true)
-    @Column(name = "LOCATION", nullable = false, columnDefinition = "geometry not null")
+    @Column(name = "LOCATION", nullable = false)
     protected Point location;
 
     public Point getLocation() {

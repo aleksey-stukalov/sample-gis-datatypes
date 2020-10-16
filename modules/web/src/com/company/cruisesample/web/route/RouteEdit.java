@@ -35,7 +35,7 @@ public class RouteEdit extends AbstractEditor<Route> {
     private MapViewer mapViewer;
 
     @Inject
-    private LookupField lookupPortsField;
+    private LookupField<Port> lookupPortsField;
 
     @Inject
     private CollectionDatasource<Port, UUID> optionsPortsDs;
@@ -49,7 +49,7 @@ public class RouteEdit extends AbstractEditor<Route> {
     @Named("portsTable.remove")
     private RemoveAction portsTableRemove;
 
-    private BidiMap portMarkerMap = new DualHashBidiMap();
+    private BidiMap<Port, Marker> portMarkerMap = new DualHashBidiMap<>();
 
     private Polyline routePolyline;
 
@@ -150,7 +150,7 @@ public class RouteEdit extends AbstractEditor<Route> {
     protected void synchronizePortsOnMap() {
         List<Port> ports = stopsDs.getItems().stream().map(Stop::getPort).collect(Collectors.toList());
         ports.forEach(port -> {
-                    Marker m = (Marker) portMarkerMap.get(port);
+                    Marker m = portMarkerMap.get(port);
                     if (m == null) {
                         m = MapViewUtils.addMarker(mapViewer, port.getName(), port.getLocation(), false);
                         portMarkerMap.put(port, m);

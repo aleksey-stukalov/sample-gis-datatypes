@@ -4,7 +4,7 @@ import com.vividsolutions.jts.geom.*;
 import com.vividsolutions.jts.geom.util.AffineTransformation;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created by aleksey on 10/03/2017.
