@@ -1,3 +1,5 @@
+create extension postgis^
+
 -- begin CRUISESAMPLE_PORT
 create table CRUISESAMPLE_PORT (
     ID uuid,
@@ -27,7 +29,6 @@ create table CRUISESAMPLE_ROUTE (
     DELETED_BY varchar(50),
     --
     NAME varchar(255) not null,
-    point geometry not null,
     --
     primary key (ID)
 )^
@@ -43,6 +44,7 @@ create table CRUISESAMPLE_WAYPOINT (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
+    POINT geometry not null,
     ETA timestamp,
     ROUTE_ID uuid,
     --

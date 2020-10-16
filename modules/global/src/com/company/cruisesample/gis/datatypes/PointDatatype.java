@@ -1,6 +1,7 @@
 package com.company.cruisesample.gis.datatypes;
 
 import com.company.cruisesample.gis.utils.GeometryUtils;
+import com.haulmont.chile.core.annotations.Ddl;
 import com.haulmont.chile.core.datatypes.Datatype;
 import com.vividsolutions.jts.geom.Point;
 
@@ -12,6 +13,7 @@ import java.util.Locale;
 /**
  * Created by aleksey on 10/03/2017.
  */
+@Ddl(dbms = "postgres", value = "geometry")
 public class PointDatatype implements Datatype<Point> {
 
     public final static String NAME = "GEOPOINT";

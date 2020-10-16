@@ -16,7 +16,7 @@ public class Waypoint extends StandardEntity {
 
     @Convert(converter = CubaPointPostgisConverter.class)
     @MetaProperty(datatype = PointDatatype.NAME, mandatory = true)
-    @Column(name = "POINT", nullable = false, columnDefinition = "geometry not null")
+    @Column(name = "POINT", nullable = false)
     protected Point point;
 
     @Temporal(TemporalType.TIMESTAMP)

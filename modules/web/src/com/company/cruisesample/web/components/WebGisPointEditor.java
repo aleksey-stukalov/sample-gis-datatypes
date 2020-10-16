@@ -1,24 +1,18 @@
 package com.company.cruisesample.web.components;
 
+import com.haulmont.bali.events.Subscription;
 import com.haulmont.charts.gui.map.model.Marker;
 import com.haulmont.charts.web.gui.components.map.google.WebGoogleMapViewer;
-import com.haulmont.chile.core.model.MetaProperty;
-import com.haulmont.chile.core.model.MetaPropertyPath;
-import com.haulmont.cuba.core.entity.Entity;
-import com.haulmont.cuba.gui.components.Field;
 import com.haulmont.cuba.gui.components.RequiredValueMissingException;
 import com.haulmont.cuba.gui.components.ValidationException;
 import com.haulmont.cuba.gui.components.ValidationFailedException;
-import com.haulmont.cuba.gui.components.validators.BeanValidator;
-import com.haulmont.cuba.gui.data.Datasource;
-import com.haulmont.cuba.gui.data.ValueListener;
-import com.haulmont.cuba.gui.data.impl.WeakItemChangeListener;
+import com.haulmont.cuba.gui.components.data.ValueSource;
+import com.haulmont.cuba.gui.components.data.meta.ValueBinding;
+import com.haulmont.cuba.gui.components.data.value.ValueBinder;
 import com.vividsolutions.jts.geom.Point;
 
 import java.util.*;
 import java.util.function.Consumer;
-
-import static com.haulmont.cuba.gui.ComponentsHelper.handleFilteredAttributes;
 
 /**
  * Created by Aleksey Stukalov on 05/06/2018.
@@ -27,33 +21,14 @@ public class WebGisPointEditor extends WebGoogleMapViewer implements GisPointEdi
 
     protected static final int VALIDATORS_LIST_INITIAL_CAPACITY = 4;
 
-    protected Datasource datasource;
-    protected MetaPropertyPath metaPropertyPath;
+    protected ValueBinding<Point> valueBinding;
 
-    protected List<Validator> validators;
-
-    protected Datasource.ItemChangeListener<Entity> securityItemChangeListener;
-    protected WeakItemChangeListener securityWeakItemChangeListener;
+    protected List<Consumer<Point>> validators; // lazily initialized list
 
     protected String requiredMessage;
     protected boolean required;
     protected boolean editable = true;
     protected Point value;
-
-    private PointValueChangedListener pointValueChangedListener;
-
-
-    //listener wires property change in datasource to setPoint call
-    protected class PointValueChangedListener implements Datasource.ItemPropertyChangeListener {
-        @Override
-        public void itemPropertyChanged(Datasource.ItemPropertyChangeEvent e) {
-            String property = getMetaPropertyPath().getMetaProperty().getName();
-            if (property.equals(e.getProperty())) {
-                Point newValue = e.getItem().getValue(property);
-                setPoint(newValue);
-            }
-        }
-    }
 
     public WebGisPointEditor() {
         //adding listeners for input
@@ -68,65 +43,6 @@ public class WebGisPointEditor extends WebGoogleMapViewer implements GisPointEdi
                 setPoint(MapViewUtils.geoPoint2Point(e.getMarker().getPosition()));
             }
         });
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public void setDatasource(Datasource datasource, String property) {
-        // initial consistency checks
-        if ((datasource == null && property != null) || (datasource != null && property == null))
-            throw new IllegalArgumentException("Datasource and property should be either null or not null at the same time");
-
-        //skip method if there is no difference between old and new values
-        if (datasource == this.datasource && ((metaPropertyPath != null && metaPropertyPath.toString().equals(property)) ||
-                (metaPropertyPath == null && property == null)))
-            return;
-
-        if (this.datasource != null) {
-            //clean up obsolete rubbish
-            metaPropertyPath = null;
-
-            this.datasource.removeItemChangeListener(securityWeakItemChangeListener);
-            securityWeakItemChangeListener = null;
-
-            this.datasource.removeItemPropertyChangeListener(pointValueChangedListener);
-            pointValueChangedListener = null;
-
-            this.datasource = null;
-
-            validators.removeIf(v -> v instanceof BeanValidator);
-        }
-
-        if (datasource != null) {
-            // initiate local fields
-            this.datasource = datasource;
-            metaPropertyPath = MetadataUtils.getMetaPropertyPath(datasource.getMetaClass(), property);
-
-            // initiate required and editable attributes from metainformation
-            setRequired(MetadataUtils.getInitialRequiredValue(metaPropertyPath.getMetaProperty()));
-            setRequiredMessage(MetadataUtils.getInitialRequiredMessage(metaPropertyPath));
-            setEditable(!metaPropertyPath.getMetaProperty().isReadOnly());
-
-            // support row-level security boilerplate
-            handleFilteredAttributes(this, this.datasource, metaPropertyPath);
-            securityItemChangeListener = e -> handleFilteredAttributes(this, this.datasource, metaPropertyPath);
-            securityWeakItemChangeListener = new WeakItemChangeListener(this.datasource, securityItemChangeListener);
-            this.datasource.addItemChangeListener(securityWeakItemChangeListener);
-
-            //initiate validator for @NotNull
-            Optional.ofNullable(MetadataUtils.getBeanValidator(metaPropertyPath)).ifPresent(this::addValidator);
-
-            // set initial value
-            datasource.addItemChangeListener(l -> {
-                if (l.getItem() != null)
-                    setPoint(l.getItem().getValue(property));
-            });
-
-            //wire property change in datasource to setPoint call,
-            //which in its turn changes the value field and repositions marker on the map
-            pointValueChangedListener = new PointValueChangedListener();
-            datasource.addItemPropertyChangeListener(pointValueChangedListener);
-        }
     }
 
     protected void placeMarker() {
@@ -155,25 +71,21 @@ public class WebGisPointEditor extends WebGoogleMapViewer implements GisPointEdi
             //reposition marker
             placeMarker();
 
-            //wire changes of the value field to the corresponding datasource item property
-            if (datasource != null && metaPropertyPath != null)
-                datasource.getItem().setValue(metaPropertyPath.getMetaProperty().getName(), value);
-
             //fire event signalling that value has been changed
-            getEventRouter().fireEvent(ValueChangeListener.class, ValueChangeListener::valueChanged, new ValueChangeEvent(this, preValue, value));
+            publish(ValueChangeEvent.class, new ValueChangeEvent<>(this, preValue, value));
         }
     }
 
     //------------- more or less boilerplate code -------------
 
     @Override
-    public <T> T getValue() {
-        return (T) value;
+    public Point getValue() {
+        return value;
     }
 
     @Override
-    public void setValue(Object value) {
-        setPoint((Point) value);
+    public void setValue(Point value) {
+        setPoint(value);
     }
 
     @Override
@@ -197,24 +109,24 @@ public class WebGisPointEditor extends WebGoogleMapViewer implements GisPointEdi
     }
 
     @Override
-    public void addValidator(Validator validator) {
+    public void addValidator(Consumer<? super Point> validator) {
         if (validators == null) {
             validators = new ArrayList<>(VALIDATORS_LIST_INITIAL_CAPACITY);
         }
         if (!validators.contains(validator)) {
-            validators.add(validator);
+            validators.add((Consumer<Point>) validator);
         }
     }
 
     @Override
-    public void removeValidator(Validator validator) {
+    public void removeValidator(Consumer<Point> validator) {
         if (validators != null) {
             validators.remove(validator);
         }
     }
 
     @Override
-    public Collection<Validator> getValidators() {
+    public Collection<Consumer<Point>> getValidators() {
         return Collections.unmodifiableCollection(
                 Optional.ofNullable(validators)
                         .orElse(Collections.emptyList())
@@ -229,16 +141,6 @@ public class WebGisPointEditor extends WebGoogleMapViewer implements GisPointEdi
     @Override
     public void setEditable(boolean editable) {
         this.editable = editable;
-    }
-
-    @Override
-    public void addValueChangeListener(ValueChangeListener listener) {
-        getEventRouter().addListener(ValueChangeListener.class, listener);
-    }
-
-    @Override
-    public void removeValueChangeListener(ValueChangeListener listener) {
-        getEventRouter().removeListener(ValueChangeListener.class, listener);
     }
 
     @Override
@@ -261,7 +163,7 @@ public class WebGisPointEditor extends WebGoogleMapViewer implements GisPointEdi
             return;
         }
 
-        Object value = getValue();
+        Point value = getValue();
         if (value == null) {
             if (isRequired()) {
                 throw new RequiredValueMissingException(getRequiredMessage(), this);
@@ -272,8 +174,8 @@ public class WebGisPointEditor extends WebGoogleMapViewer implements GisPointEdi
 
         if (validators != null) {
             try {
-                for (Field.Validator validator : validators) {
-                    validator.validate(value);
+                for (Consumer<Point> validator : validators) {
+                    validator.accept(value);
                 }
             } catch (ValidationException e) {
                 setValidationError(e.getDetailsMessage());
@@ -284,63 +186,34 @@ public class WebGisPointEditor extends WebGoogleMapViewer implements GisPointEdi
     }
 
     @Override
-    public Datasource getDatasource() {
-        return datasource;
+    public Subscription addValueChangeListener(Consumer<ValueChangeEvent<Point>> listener) {
+        return getEventHub().subscribe(ValueChangeEvent.class, (Consumer) listener);
     }
 
     @Override
-    public MetaPropertyPath getMetaPropertyPath() {
-        return metaPropertyPath;
-    }
-
-    //------------------------ NOT SUPPORTED ------------------------
-
-    @Override
-    public String getContextHelpText() {
-        return null;
+    public void removeValueChangeListener(Consumer<ValueChangeEvent<Point>> listener) {
+        unsubscribe(ValueChangeEvent.class, (Consumer) listener);
     }
 
     @Override
-    public void setContextHelpText(String contextHelpText) {
+    public void setValueSource(ValueSource<Point> valueSource) {
+        if (this.valueBinding != null) {
+            valueBinding.unbind();
 
+            this.valueBinding = null;
+        }
+
+        if (valueSource != null) {
+            ValueBinder binder = beanLocator.get(ValueBinder.class);
+
+            this.valueBinding = binder.bind(this, valueSource);
+
+            this.valueBinding.activate();
+        }
     }
 
     @Override
-    public boolean isContextHelpTextHtmlEnabled() {
-        return false;
+    public ValueSource<Point> getValueSource() {
+        return valueBinding != null ? valueBinding.getSource() : null;
     }
-
-    @Override
-    public void setContextHelpTextHtmlEnabled(boolean enabled) {
-
-    }
-
-    @Override
-    public Consumer<ContextHelpIconClickEvent> getContextHelpIconClickHandler() {
-        return null;
-    }
-
-    @Override
-    public void setContextHelpIconClickHandler(Consumer<ContextHelpIconClickEvent> handler) {
-
-    }
-
-    @Override
-    @Deprecated
-    public MetaProperty getMetaProperty() {
-        return null;
-    }
-
-    @Override
-    @Deprecated
-    public void addListener(ValueListener listener) {
-        //not implemented
-    }
-
-    @Override
-    @Deprecated
-    public void removeListener(ValueListener listener) {
-        //not implemented
-    }
-
 }

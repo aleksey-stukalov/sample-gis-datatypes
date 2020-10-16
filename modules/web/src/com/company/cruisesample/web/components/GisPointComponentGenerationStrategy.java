@@ -4,12 +4,13 @@ import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.chile.core.model.MetaProperty;
 import com.haulmont.chile.core.model.MetaPropertyPath;
 import com.haulmont.chile.core.model.Range;
+import com.haulmont.cuba.core.app.dynamicattributes.DynamicAttributesTools;
 import com.haulmont.cuba.core.global.Messages;
-import com.haulmont.cuba.gui.components.AbstractComponentGenerationStrategy;
+import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.ComponentGenerationContext;
 import com.haulmont.cuba.gui.components.ComponentGenerationStrategy;
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
+import com.haulmont.cuba.gui.components.factories.AbstractComponentGenerationStrategy;
 import com.vividsolutions.jts.geom.Point;
 import org.springframework.core.Ordered;
 
@@ -24,6 +25,16 @@ import javax.inject.Inject;
 public class GisPointComponentGenerationStrategy extends AbstractComponentGenerationStrategy implements Ordered {
 
     public static final String NAME = "cruisesample_GisPointComponentGeneration";
+
+    @Inject
+    public GisPointComponentGenerationStrategy(Messages messages, DynamicAttributesTools dynamicAttributesTools) {
+        super(messages, dynamicAttributesTools);
+    }
+
+    @Inject
+    public void setUiComponents(UiComponents uiComponents) {
+        this.uiComponents = uiComponents;
+    }
 
     @Nullable
     @Override
@@ -45,8 +56,8 @@ public class GisPointComponentGenerationStrategy extends AbstractComponentGenera
     }
 
     private Component createMap(ComponentGenerationContext context) {
-        GisPointEditor pointEditor = componentsFactory.createComponent(GisPointEditor.class);
-        pointEditor.setDatasource(context.getDatasource(), context.getProperty());
+        GisPointEditor pointEditor = uiComponents.create(GisPointEditor.class);
+        pointEditor.setValueSource(context.getValueSource());
         return pointEditor;
     }
 
@@ -54,15 +65,4 @@ public class GisPointComponentGenerationStrategy extends AbstractComponentGenera
     public int getOrder() {
         return ComponentGenerationStrategy.HIGHEST_PLATFORM_PRECEDENCE;
     }
-
-    @Inject
-    public GisPointComponentGenerationStrategy(Messages messages) {
-        super(messages);
-    }
-
-    @Inject
-    public void setComponentsFactory(ComponentsFactory componentsFactory){
-        this.componentsFactory = componentsFactory;
-    }
-
 }

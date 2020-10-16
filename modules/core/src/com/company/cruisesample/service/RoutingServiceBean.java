@@ -3,7 +3,7 @@ package com.company.cruisesample.service;
 import com.company.cruisesample.entity.Stop;
 import com.company.cruisesample.entity.Waypoint;
 import com.haulmont.cuba.core.global.Metadata;
-import org.apache.commons.lang.time.DateUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
